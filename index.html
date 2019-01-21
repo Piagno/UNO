@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>UNO by piagno</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="game.js"></script>
+        <script>
+            window.onload = (r)=>{
+                let uno = document.getElementById('uno')
+                function log(text){
+                    let newLog = document.createElement('div')
+                    if(typeof(text)== 'object'){
+                        newLog.innerText = JSON.stringify(text)
+                    }else{
+                        newLog.innerText = text    
+                    }
+                    document.getElementById('logger').appendChild(newLog)
+                }
+                function displayCard(card){
+                    
+                }
+                function displayDeck(player,deck,chosenCard){
+                    
+                }
+                function displayNext(player,ready){
+                    uno.innerHTML = ''
+                    let playerNameEL = document.createElement('div')
+                    playerNameEL.innerText = 'Next Player: '+player
+                    uno.appendChild(playerNameEL)
+                    let playerReadyEL = document.createElement('button')
+                    playerReadyEL.type = 'button'
+                    playerReadyEL.innerText = 'Click here, when you are ready!'
+                    playerReadyEL.onclick = function(){
+                        ready()
+                    }
+                    uno.appendChild(playerReadyEL)
+                }
+                game = new UNO(7)
+                let piagno = game.newPlayer('Piagno')
+                let marco = game.newPlayer('Marco')
+                let erik = game.newPlayer('Erik')
+                let anna = game.newPlayer('Anna')
+                game.giveCards()
+                game.onPlayerFinished = (nextPlayer)=>{
+                    displayNext(nextPlayer,game.playerReady)
+                }
+                game.onPlayerNext = (player,chosenCard)=>{
+                    displayDeck(player,player.deck,chosenCard)
+                }
+                game.start((card)=>{
+                    displayCard(card)
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <div id="uno"></div>
+        <div id="logger"></div>
+    </body>
+</html>
