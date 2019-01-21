@@ -9,33 +9,47 @@
         <script>
             window.onload = (r)=>{
                 let uno = document.getElementById('uno')
-                function log(text){
-                    let newLog = document.createElement('div')
-                    if(typeof(text)== 'object'){
-                        newLog.innerText = JSON.stringify(text)
-                    }else{
-                        newLog.innerText = text    
-                    }
-                    document.getElementById('logger').appendChild(newLog)
-                }
                 function displayCard(card){
-                    
+                    let deck = document.getElementById('deck')
+                    deck.innerText = 'Card: '+card.color+' '
+                    if(card.number === undefined){
+                        deck.innerText += ' '+card.action
+                    }else{
+                        deck.innerText += ' '+card.number
+                    }
                 }
                 function displayDeck(player,deck,chosenCard){
-                    
+                    let place = document.getElementById('currentPlayer')
+                    place.innerHTML = ''
+                    deck.forEach((card)=>{
+                        let cardEl = document.createElement('div')
+                        cardEl.innerHTML = 'Card: '+card.color+' '
+                        if(card.number === undefined){
+                            cardEl.innerHTML += card.action
+                        }else{
+                            cardEl.innerHTML += card.number
+                        }
+                        cardEl.onclick = ()=>{
+                            place.innerHTML = ''
+                            chosenCard(card)
+                        }
+                        place.appendChild(cardEl)
+                    })
                 }
-                function displayNext(player,ready){
-                    uno.innerHTML = ''
+                function displayNext(player){
+                    let ready = document.getElementById('ready')
+                    ready.innerHTML = ''
                     let playerNameEL = document.createElement('div')
                     playerNameEL.innerText = 'Next Player: '+player
-                    uno.appendChild(playerNameEL)
+                    ready.appendChild(playerNameEL)
                     let playerReadyEL = document.createElement('button')
                     playerReadyEL.type = 'button'
                     playerReadyEL.innerText = 'Click here, when you are ready!'
                     playerReadyEL.onclick = function(){
-                        ready()
+                        ready.innerHTML = ''
+                        game.playerReady(player)
                     }
-                    uno.appendChild(playerReadyEL)
+                    ready.appendChild(playerReadyEL)
                 }
                 game = new UNO(7)
                 let piagno = game.newPlayer('Piagno')
@@ -44,10 +58,13 @@
                 let anna = game.newPlayer('Anna')
                 game.giveCards()
                 game.onPlayerFinished = (nextPlayer)=>{
-                    displayNext(nextPlayer,game.playerReady)
+                    displayNext(nextPlayer)
                 }
                 game.onPlayerNext = (player,chosenCard)=>{
                     displayDeck(player,player.deck,chosenCard)
+                }
+                game.displayCard = (card)=>{
+                    displayCard(card)
                 }
                 game.start((card)=>{
                     displayCard(card)
@@ -56,7 +73,11 @@
         </script>
     </head>
     <body>
-        <div id="uno"></div>
+        <div id="uno">
+            <div id="currentPlayer"></div>
+            <div id="ready"></div>
+            <div id="deck"></div>
+        </div>
         <div id="logger"></div>
     </body>
 </html>

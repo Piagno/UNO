@@ -116,6 +116,7 @@ class UNO{
         this.status = 'preparing'
         this.players = []
         this.nextPlayer = ''
+        this.direction = 'normal'
     }
     takeCard(){
         let index = Math.floor(Math.random() * this.currentDeck.length)
@@ -137,7 +138,7 @@ class UNO{
     }
     newPlayer(name){
         if(this.status == 'preparing'){
-            this.players.push(new UNOPlayer(name))
+            this.players.push(new UNOPlayer(name,this))
         }
     }
     set onPlayerFinished(cb){
@@ -145,6 +146,9 @@ class UNO{
     }
     set onPlayerNext(cb){
         this.onPlayerNextEvent = cb
+    }
+    set displayCard(cb){
+        this.displayCardEvent = cb
     }
     start(displayFirstCard){
         let startIndex = Math.floor(Math.random() * this.players.length)
@@ -158,40 +162,64 @@ class UNO{
     playerReady(player){
         let nextPlayer = this.nextPlayer
         if(nextPlayer.name = player){
-            this.onPlayerNextEvent(nextPlayer,(card)={
-                nextPlayer.place(this,card)
+            this.onPlayerNextEvent(nextPlayer,function(card){
+                nextPlayer.place(card)
             })
         }
     }
     place(card){
         this.discardDeck.push(card)
         this.currentCard = card
+        this.displayCardEvent(this.currentCard)
         this.next()
     }
     next(){
-        
+        let oldIndex = this.players.indexOf(this.nextPlayer)
+        let newIndex = null
+        if(this.direction == 'normal'){
+            newIndex = oldIndex + 1
+        }else{
+            newIndex = oldIndex - 1
+        }
+        if(this.players.length == newIndex){
+            newIndex = 0;
+        }
+        if(newIndex < 0){
+            newIndex = this.players.length + 1
+        }
+        console.log(oldIndex)
+        console.log(newIndex)
+        this.nextPlayer = this.players[newIndex]
+        this.onPlayerFinishedEvent(this.nextPlayer.name)
     }
 }
 class UNOPlayer{
-    constructor(name){
+    constructor(name,game){
         this.name = name
         this.deck = []
+        this.game = game
     }
     receiveCard(card){
         this.deck.push(card)
     }
-    place(game,card){
+    place(card){
         if(this.deck.indexOf(card) != -1){
-            let currCard = game.currentCard
+            let currCard = this.game.currentCard
+            console.log(this.game)
             if(card.color == currCard.color){
-                game.placeCard(card)
+                this.trueplace(card)
             }
             if(card.number == currCard.number){
-                game.placeCard(card)
+                this.trueplace(card)
             }
             if(card.action == currCard.action){
-                game.placeCard(card)
+                this.trueplace(card)
             }
         }
+    }
+    trueplace(card){
+        let cardIndex = this.deck.indexOf(card)
+        this.deck.splice(cardIndex,1)
+        this.game.place(card)
     }
 }
