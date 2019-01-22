@@ -228,7 +228,7 @@ class UNO{
         if(this.currentCard.action == 'add' && (!(noCard))){
             this.currentAdd += this.currentCard.count
         }
-        if(this.currectCard.action == 'change'){
+        if(this.currentCard.action == 'change'){
             newIndex = oldIndex
         }
         this.nextPlayer = this.players[newIndex]
