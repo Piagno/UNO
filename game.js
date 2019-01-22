@@ -25,8 +25,8 @@ class UNO{
             {color:'green',action:'change'},
             {color:'green',action:'stop'},
             {color:'green',action:'stop'},
-            {color:'green',action:'+2'},
-            {color:'green',action:'+2'},
+            {color:'green',action:'add',count:2},
+            {color:'green',action:'add',count:2},
             {color:'blue',number:0},
             {color:'blue',number:1},
             {color:'blue',number:2},
@@ -50,8 +50,8 @@ class UNO{
             {color:'blue',action:'change'},
             {color:'blue',action:'stop'},
             {color:'blue',action:'stop'},
-            {color:'blue',action:'+2'},
-            {color:'blue',action:'+2'},
+            {color:'blue',action:'add',count:2},
+            {color:'blue',action:'add',count:2},
             {color:'yellow',number:0},
             {color:'yellow',number:1},
             {color:'yellow',number:2},
@@ -75,8 +75,8 @@ class UNO{
             {color:'yellow',action:'change'},
             {color:'yellow',action:'stop'},
             {color:'yellow',action:'stop'},
-            {color:'yellow',action:'+2'},
-            {color:'yellow',action:'+2'},
+            {color:'yellow',action:'add',count:2},
+            {color:'yellow',action:'add',count:2},
             {color:'red',number:0},
             {color:'red',number:1},
             {color:'red',number:2},
@@ -100,16 +100,16 @@ class UNO{
             {color:'red',action:'change'},
             {color:'red',action:'stop'},
             {color:'red',action:'stop'},
-            {color:'red',action:'+2'},
-            {color:'red',action:'+2'},
+            {color:'red',action:'add',count:2},
+            {color:'red',action:'add',count:2},
             {color:'black',action:'choose'},
             {color:'black',action:'choose'},
             {color:'black',action:'choose'},
             {color:'black',action:'choose'},
-            {color:'black',action:'+4'},
-            {color:'black',action:'+4'},
-            {color:'black',action:'+4'},
-            {color:'black',action:'+4'}
+            {color:'black',action:'add',count:4},
+            {color:'black',action:'add',count:4},
+            {color:'black',action:'add',count:4},
+            {color:'black',action:'add',count:4}
         ]
         this.currentDeck = JSON.parse(JSON.stringify(this.cards))
         this.discardDeck = []
@@ -117,29 +117,7 @@ class UNO{
         this.players = []
         this.nextPlayer = ''
         this.direction = 'normal'
-    }
-    takeCard(){
-        let index = Math.floor(Math.random() * this.currentDeck.length)
-        if(this.currentDeck.length == 0){
-            this.currentDeck = JSON.parse(JSON.stringify(this.discardDeck))
-        }
-        let card = this.currentDeck[index]
-        this.currentDeck.splice(index,1)
-        return card
-    }
-    giveCards(){
-        this.players.forEach((player)=>{
-            for(let i=0;i<this.startCardCount;i++){
-                let card = this.takeCard()
-                player.receiveCard(card)
-            }
-        })
-        this.status = 'ready'
-    }
-    newPlayer(name){
-        if(this.status == 'preparing'){
-            this.players.push(new UNOPlayer(name,this))
-        }
+        this.currentAdd = 0
     }
     set onPlayerFinished(cb){
         this.onPlayerFinishedEvent = cb
@@ -150,15 +128,60 @@ class UNO{
     set displayCard(cb){
         this.displayCardEvent = cb
     }
+    set winning(cb){
+        this.winningEvent = cb
+    }
+    newPlayer(name){
+        if(this.status == 'preparing'){
+            this.players.push(new UNOPlayer(name,this))
+        }
+    }
+    giveCards(){
+        this.players.forEach((player)=>{
+            for(let i=0;i<this.startCardCount;i++){
+                let card = this.takeCard()
+                player.receiveCard(card)
+            }
+        })
+        this.status = 'ready'
+    }
     start(displayFirstCard){
         let startIndex = Math.floor(Math.random() * this.players.length)
         let startCard = this.takeCard()
         this.currentCard = startCard
         displayFirstCard(startCard)
-        let nextPlayer = this.players[startIndex]
+        if(startCard.action == 'add'){
+            this.currentAdd = startCard.count
+        }
+        let nextPlayer = this.players[startIndex -1]
         this.nextPlayer = nextPlayer
         this.onPlayerFinishedEvent(nextPlayer.name)
     }
+    win(player){
+        console.log('The winner is: '+player.name)
+        this.winningEvent(player.name)
+    } 
+    takeCard(){
+        let index = Math.floor(Math.random() * this.currentDeck.length)
+        if(this.currentDeck.length == 0){
+            this.currentDeck = JSON.parse(JSON.stringify(this.discardDeck))
+        }
+        let card = this.currentDeck[index]
+        this.currentDeck.splice(index,1)
+        return card
+    }
+    cardAllowed(testingCard){
+        let currentCard = this.currentCard
+        if(testingCard.color == 'black'){return true}
+        if(testingCard.color == currentCard.chosenColor){return true}
+        if(testingCard.color == currentCard.color){return true}
+        if(testingCard.number == undefined){
+            if(testingCard.action == currentCard.action){return true}
+        }else{
+            if(testingCard.number == currentCard.number){return true}
+        }
+        return false
+    } 
     playerReady(player){
         let nextPlayer = this.nextPlayer
         if(nextPlayer.name = player){
@@ -170,26 +193,46 @@ class UNO{
     place(card){
         this.discardDeck.push(card)
         this.currentCard = card
+        if(this.currentCard.action == 'change'){
+            if(this.direction == 'normal'){
+                this.direction = 'opposite'
+            }else{
+                this.direction = 'normal'
+            }
+        }
         this.displayCardEvent(this.currentCard)
         this.next()
     }
-    next(){
+    next(noCard){
+        if(this.nextPlayer.deck.length == 0){
+            this.win(this.nextPlayer)
+            return
+        }
         let oldIndex = this.players.indexOf(this.nextPlayer)
         let newIndex = null
-        if(this.direction == 'normal'){
-            newIndex = oldIndex + 1
-        }else{
-            newIndex = oldIndex - 1
+        let adder = 1
+        if(this.currentCard.action == 'stop' && (!(noCard))){
+            adder = 2
         }
-        if(this.players.length == newIndex){
-            newIndex = 0;
+        if(this.direction == 'normal'){
+            newIndex = oldIndex + adder
+        }else{
+            newIndex = oldIndex - adder
+        }
+        if(this.players.length <= newIndex){
+            newIndex = newIndex - this.players.length;
         }
         if(newIndex < 0){
-            newIndex = this.players.length + 1
+            newIndex = this.players.length + newIndex
         }
-        console.log(oldIndex)
-        console.log(newIndex)
+        if(this.currentCard.action == 'add' && (!(noCard))){
+            this.currentAdd += this.currentCard.count
+        }
+        if(this.currectCard.action == 'change'){
+            newIndex = oldIndex
+        }
         this.nextPlayer = this.players[newIndex]
+        console.log('Next player: '+this.nextPlayer.name+' he has to take up '+this.currentAdd+' cards!')
         this.onPlayerFinishedEvent(this.nextPlayer.name)
     }
 }
@@ -204,22 +247,11 @@ class UNOPlayer{
     }
     place(card){
         if(this.deck.indexOf(card) != -1){
-            let currCard = this.game.currentCard
-            console.log(this.game)
-            if(card.color == currCard.color){
-                this.trueplace(card)
-            }
-            if(card.number == currCard.number){
-                this.trueplace(card)
-            }
-            if(card.action == currCard.action){
-                this.trueplace(card)
+            if(this.game.cardAllowed(card)){
+                let cardIndex = this.deck.indexOf(card)
+                this.deck.splice(cardIndex,1)
+                this.game.place(card)
             }
         }
-    }
-    trueplace(card){
-        let cardIndex = this.deck.indexOf(card)
-        this.deck.splice(cardIndex,1)
-        this.game.place(card)
     }
 }
