@@ -14,8 +14,14 @@
                     deck.innerText = 'Card: '+card.color+' '
                     if(card.number === undefined){
                         deck.innerText += ' '+card.action
+                        if(card.action == 'add'){
+                            deck.innerText += ' '+card.count
+                        }
                     }else{
                         deck.innerText += ' '+card.number
+                    }
+                    if(card.chosenColor !== undefined){
+                        deck.innerText += ' wish: '+card.chosenColor
                     }
                 }
                 function displayDeck(player,deck,chosenCard){
