@@ -151,14 +151,11 @@ window.onload = (r)=>{
         }
         ready.appendChild(playerReadyEL)
     }
-    let playerCount = 3//prompt('How many players?')
-    game = new UNO(5)//prompt('How many cards to start with?'))
+    let playerCount = prompt('How many players?')
+    game = new UNO(prompt('How many cards to start with?'))
     for(let i=1;i<=playerCount;i++){
-        //game.newPlayer(prompt('Player name of player '+i+':'))
+        game.newPlayer(prompt('Player name of player '+i+':'))
     }
-    game.newPlayer('fff')
-    game.newPlayer('ddd')
-    game.newPlayer('sss')
     game.giveCards()
     game.onPlayerFinished = (nextPlayer)=>{
         displayNext(nextPlayer)
