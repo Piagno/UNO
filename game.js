@@ -153,7 +153,7 @@ class UNO{
         if(startCard.action == 'add'){
             this.currentAdd = startCard.count
         }
-        let nextPlayer = this.players[startIndex -1]
+        let nextPlayer = this.players[startIndex]
         this.nextPlayer = nextPlayer
         this.onPlayerFinishedEvent(nextPlayer.name)
     }
