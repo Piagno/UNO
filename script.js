@@ -1,6 +1,26 @@
 
 window.onload = (r)=>{
     let uno = document.getElementById('uno')
+    function prompting(question,type,cb){
+        let promptElement = document.getElementById('prompter')
+        let questionElement = document.getElementById('question')
+        let input = document.getElementById('input')
+        //let counters = document.getElementById('counters')
+        let enter = document.getElementById('promptEnter')
+        questionElement.innerText = question
+        if(type == 'number'){
+            //counters.style.display = 'block'
+        }
+        if(type == 'text'){
+            //counters.style.display = 'none'
+        }
+        input.type = type
+        promptElement.style.display = 'flex'
+        enter.onclick = (e)=>{
+            promptElement.style.display = 'none'
+            cb(input.value)
+        }
+    }
     function displayCard(card){
         let deck = document.getElementById('deck')
         deck.innerText = 'Card: '+card.color+' '
