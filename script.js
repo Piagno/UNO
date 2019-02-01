@@ -117,6 +117,7 @@ window.onload = (r)=>{
     function displayNext(player){
         let ready = document.getElementById('ready')
         ready.innerHTML = ''
+        ready.style.display = 'flex'
         let playerNameEL = document.createElement('div')
         playerNameEL.innerText = 'Next Player: '+player
         ready.appendChild(playerNameEL)
@@ -125,6 +126,7 @@ window.onload = (r)=>{
         playerReadyEL.innerText = 'Click here, when you are ready!'
         playerReadyEL.onclick = function(){
             ready.innerHTML = ''
+            ready.style.display = 'none'
             game.playerReady(player)
         }
         ready.appendChild(playerReadyEL)
