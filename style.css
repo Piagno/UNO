@@ -1,4 +1,56 @@
-#deck{
-    background-color: black;
-    color: white
+body{
+    margin: 0
+}
+#winnerElement{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    font-size: 12vh;
+    background-color: crimson;
+    color: white;
+    text-align: center;
+    line-height: 100vh;
+    margin: 0px;
+}
+#currentCard{
+    height: 50vh;
+    text-align: center;
+    font-size: 8vh;
+    line-height: 50vh;
+}
+#ready{
+    height: 50vh;
+    width: 100vw;
+    font-size: 6vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#ready > *{
+    flex-grow: 1;
+}
+#ready div{
+    text-align: center;
+    line-height: 50vh;
+}
+#ready button{
+    font-size: 4vh;
+    border: 0;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: crimson;
+    color: white;
+    margin-bottom: 15vh;
+    margin-top: 15vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#ready button:hover{
+    background-color: red;
+    transition: background 0.5s;
 }
