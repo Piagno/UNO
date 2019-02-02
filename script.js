@@ -151,26 +151,37 @@ window.onload = (r)=>{
         }
         ready.appendChild(playerReadyEL)
     }
-    let playerCount = prompt('How many players?')
-    game = new UNO(prompt('How many cards to start with?'))
-    for(let i=1;i<=playerCount;i++){
-        game.newPlayer(prompt('Player name of player '+i+':'))
+    function gameReady(){
+        if(game.players.length != playerCountPublic){
+            prompting('Player name of player '+(game.players.length +1)+':','text',(playerName)=>{
+                game.newPlayer(playerName)
+                gameReady()
+            })
+        }else{
+            game.onPlayerFinished = (nextPlayer)=>{
+                displayNext(nextPlayer)
+            }
+            game.onPlayerNext = (player,chosenCard)=>{
+                displayDeck(player,player.deck,chosenCard)
+            }
+            game.displayCard = (card)=>{
+                displayCard(card)
+            }
+            game.winning = (winner)=>{
+                document.getElementById('winner').innerText = winner
+                document.getElementById('winnerElement').style.display = 'block'
+            }
+            game.giveCards()
+            game.start((card)=>{
+                displayCard(card)
+            })
+        }
     }
-    game.giveCards()
-    game.onPlayerFinished = (nextPlayer)=>{
-        displayNext(nextPlayer)
-    }
-    game.onPlayerNext = (player,chosenCard)=>{
-        displayDeck(player,player.deck,chosenCard)
-    }
-    game.displayCard = (card)=>{
-        displayCard(card)
-    }
-    game.winning = (winner)=>{
-        document.getElementById('winner').innerText = winner
-        document.getElementById('winnerElement').style.display = 'block'
-    }
-    game.start((card)=>{
-        displayCard(card)
+    prompting('How many players?','number',(playerCount)=>{
+        prompting('How many cards to start with?','number',(cardCount)=>{
+            game = new UNO(cardCount)
+            playerCountPublic = playerCount
+            gameReady()
+        })
     })
 }
