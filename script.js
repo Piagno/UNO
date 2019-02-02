@@ -130,6 +130,14 @@ window.onload = (r)=>{
                     console.log("no action possible by "+player.name)
                     place.innerHTML = ''
                     game.next(true)
+                }else{
+                    let takeCard = document.createElement('button')
+                    takeCard.type = 'button'
+                    takeCard.innerText = 'Skip'
+                    takeCard.onclick = ()=>{
+                        place.innerHTML = ''
+                        game.next()
+                    }
                 }
             }
         }else{
@@ -162,14 +170,14 @@ window.onload = (r)=>{
                 takeCard.type = 'button'
                 takeCard.innerText = 'Take new Card'
                 takeCard.onclick = ()=>{
-                        let newCard = game.takeCard()
-                        player.receiveCard(newCard)
-                        addCard(newCard)
-                        takeCard.innerText = 'Skip'
-                        takeCard.onclick = ()=>{
-                            place.innerHTML = ''
-                            game.next(true)
-                        }
+                    let newCard = game.takeCard()
+                    player.receiveCard(newCard)
+                    addCard(newCard)
+                    takeCard.innerText = 'Skip'
+                    takeCard.onclick = ()=>{
+                        place.innerHTML = ''
+                        game.next(true)
+                    }
                 }
                 place.appendChild(takeCard)
             }
