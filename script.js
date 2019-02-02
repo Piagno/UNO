@@ -22,6 +22,26 @@ window.onload = (r)=>{
             cb(input.value)
         }
     }
+    function colorPrompting(cb){
+        let promptElement = document.getElementById('colorPrompter')
+        document.getElementById('chooseRed').onclick = function(e){
+            promptElement.style.display = 'none'
+            cb('red')
+        }
+        document.getElementById('chooseGreen').onclick = function(e){
+            promptElement.style.display = 'none'
+            cb('green')
+        }
+        document.getElementById('chooseBlue').onclick = function(e){
+            promptElement.style.display = 'none'
+            cb('blue')
+        }
+        document.getElementById('chooseYellow').onclick = function(e){
+            promptElement.style.display = 'none'
+            cb('yellow')
+        }
+        promptElement.style.display = 'flex'
+    }
     function displayCard(card){
         let deck = document.getElementById('deck')
         deck.innerText = 'Card: '+card.color+' '
@@ -50,24 +70,37 @@ window.onload = (r)=>{
                 possibleCards++
                 cardEl.onclick = ()=>{
                     if(card.color == 'black'){
-                        let chosenColor = prompt('Choose a color:')
-                        card.chosenColor = chosenColor
-                    }
-                    if(game.currentAdd > 0){
-                        if(game.currentCard.color == 'black'){
-                            if(card.color == game.currentCard.chosenColor && card.action == 'add'){
-                                place.innerHTML = ''
-                                chosenCard(card)
-                            }
-                        }else{
+                        if(game.currentAdd > 0){
                             if(card.action == 'add'){
                                 place.innerHTML = ''
-                                chosenCard(card)
+                                colorPrompting((chosenColor)=>{
+                                    card.chosenColor = chosenColor
+                                    chosenCard(card)
+                                })
                             }
+                        }else{
+                            place.innerHTML = ''
+                            colorPrompting((chosenColor)=>{
+                                card.chosenColor = chosenColor
+                                chosenCard(card)
+                            })
                         }
                     }else{
-                        place.innerHTML = ''
-                        chosenCard(card)
+                        if(game.currentAdd > 0){
+                            if(game.currentCard.color == 'black'){
+                                if((card.color == game.currentCard.chosenColor) && (card.action == 'add')){
+                                    place.innerHTML = ''
+                                    chosenCard(card)
+                                }
+                                if(card.action == 'add'){
+                                    place.innerHTML = ''
+                                    chosenCard(card)
+                                }
+                            }
+                        }else{
+                            place.innerHTML = ''
+                            chosenCard(card)
+                        }
                     }
                 }
             }
