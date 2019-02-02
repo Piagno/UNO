@@ -15,6 +15,7 @@ window.onload = (r)=>{
             //counters.style.display = 'none'
         }
         input.type = type
+        input.value = ''
         promptElement.style.display = 'flex'
         enter.onclick = (e)=>{
             promptElement.style.display = 'none'
