@@ -14,7 +14,15 @@ body{
 }
 #prompter > *{
     flex-grow: 1;
-    margin: 48vh 50px;
+    margin: 47vh 50px;
+}
+#promptEnter{
+    background-color: white;
+    color: black;
+    border-radius: 4px;
+    padding: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 #winnerElement{
     height: 100vh;
