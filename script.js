@@ -53,9 +53,16 @@ window.onload = (r)=>{
                         card.chosenColor = chosenColor
                     }
                     if(game.currentAdd > 0){
-                        if(card.action == 'add'){
-                            place.innerHTML = ''
-                            chosenCard(card)
+                        if(game.currentCard.color == 'black'){
+                            if(card.color == game.currentCard.chosenColor && card.action == 'add'){
+                                place.innerHTML = ''
+                                chosenCard(card)
+                            }
+                        }else{
+                            if(card.action == 'add'){
+                                place.innerHTML = ''
+                                chosenCard(card)
+                            }
                         }
                     }else{
                         place.innerHTML = ''
