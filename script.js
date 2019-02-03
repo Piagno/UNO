@@ -151,6 +151,21 @@ window.onload = (r)=>{
                         game.next()
                     }
                 }
+            }else{
+                let takeCard = document.createElement('button')
+                takeCard.type = 'button'
+                takeCard.innerText = 'Take new Card'
+                takeCard.onclick = ()=>{
+                    let newCard = game.takeCard()
+                    player.receiveCard(newCard)
+                    addCard(newCard)
+                    takeCard.innerText = 'Skip'
+                    takeCard.onclick = ()=>{
+                        place.innerHTML = ''
+                        game.next(true)
+                    }
+                }
+                place.appendChild(takeCard)
             }
         }else{
             if(game.currentAdd > 0){
