@@ -44,17 +44,28 @@ window.onload = (r)=>{
     }
     function displayCard(card){
         let deck = document.getElementById('deck')
-        deck.innerText = 'Card: '+card.color+' '
+        if(card.color == 'black'){
+            deck.style.color = card.chosenColor
+        }else{
+            deck.style.color = card.color
+        }
         if(card.number === undefined){
-            deck.innerText += ' '+card.action
-            if(card.action == 'add'){
-                deck.innerText += ' '+card.count
+            switch(card.action){
+                case 'add':
+                    deck.innerText = '+'+card.count
+                    break;
+                case 'stop':
+                    deck.innerText = '∅'
+                    break;
+                case 'change':
+                    deck.innerText = '⇔'
+                    break;
+                case 'choose':
+                    deck.innerText = '?'
+                    break;
             }
         }else{
-            deck.innerText += ' '+card.number
-        }
-        if(card.chosenColor !== undefined){
-            deck.innerText += ' wish: '+card.chosenColor
+            deck.innerText = card.number
         }
     }
     function displayDeck(player,deck,chosenCard){
