@@ -103,6 +103,7 @@ window.onload = (r)=>{
                                     place.innerHTML = ''
                                     chosenCard(card)
                                 }
+                            }else{
                                 if(card.action == 'add'){
                                     place.innerHTML = ''
                                     chosenCard(card)
