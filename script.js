@@ -42,41 +42,45 @@ window.onload = (r)=>{
         }
         promptElement.style.display = 'block'
     }
-    function displayCard(card){
-        let deck = document.getElementById('deck')
+    function getDisplayCardData(card){
+        let values = {}
         if(card.color == 'black'){
-            deck.style.color = card.chosenColor
+            values.color = card.chosenColor
         }else{
-            deck.style.color = card.color
+            values.color = card.color
         }
         if(card.number === undefined){
             switch(card.action){
                 case 'add':
-                    deck.innerText = '+'+card.count
+                    values.text = '+'+card.count
                     break;
                 case 'stop':
-                    deck.innerText = '∅'
+                    values.text = '∅'
                     break;
                 case 'change':
-                    deck.innerText = '⇔'
+                    values.text = '⇔'
                     break;
                 case 'choose':
-                    deck.innerText = '?'
+                    values.text = '?'
                     break;
             }
         }else{
-            deck.innerText = card.number
+            values.text = card.number
         }
+        return values
+    }
+    function displayCard(card){
+        let deck = document.getElementById('deck')
+        let values = getDisplayCardData(card)
+        deck.style.color = values.color
+        deck.innerText = values.text
     }
     function displayDeck(player,deck,chosenCard){
         function addCard(card){
             let cardEl = document.createElement('div')
-            cardEl.innerHTML = 'Card: '+card.color+' '
-            if(card.number === undefined){
-                cardEl.innerHTML += card.action
-            }else{
-                cardEl.innerHTML += card.number
-            }
+            let values = getDisplayCardData(card)
+            cardEl.style.color = values.color
+            cardEl.innerText = values.text
             if(game.cardAllowed(card)){
                 possibleCards++
                 cardEl.onclick = ()=>{
