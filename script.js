@@ -104,27 +104,32 @@ window.onload = (r)=>{
                         if(game.currentAdd > 0){
                             if(game.currentCard.color == 'black'){
                                 if((card.color == game.currentCard.chosenColor) && (card.action == 'add')){
-                                    place.innerHTML = ''
+                                    place.style.display = 'none'
                                     chosenCard(card)
                                 }
                             }else{
                                 if(card.action == 'add'){
-                                    place.innerHTML = ''
+                                    place.style.display = 'none'
                                     chosenCard(card)
                                 }
                             }
                         }else{
-                            place.innerHTML = ''
+                            place.style.display = 'none'
                             chosenCard(card)
                         }
                     }
                 }
             }
-            place.appendChild(cardEl)
+            hand.appendChild(cardEl)
         }
         let place = document.getElementById('currentPlayer')
-        place.innerHTML = '<div>'+player.name+'</div>'
+        let actionButton = document.getElementById('actionButton')
+        let hand = document.getElementById('currentHand')
         let possibleCards = 0
+        hand.innerHTML = ''
+        document.getElementById('playerName').innerText = player.name
+        actionButton.innerText = ''
+        actionButton.onclick = ()=>{}
         deck.forEach((card)=>{
             addCard(card)
         })
@@ -144,75 +149,65 @@ window.onload = (r)=>{
                 addCard(newCard)
                 if(possibleCards == 0){
                     console.log("no action possible by "+player.name)
-                    place.innerHTML = ''
+                    place.style.display = 'none'
                     game.next(true)
                 }else{
-                    let takeCard = document.createElement('button')
-                    takeCard.type = 'button'
-                    takeCard.innerText = 'Skip'
-                    takeCard.onclick = ()=>{
-                        place.innerHTML = ''
+                    actionButton.innerText = 'Skip'
+                    actionButton.onclick = ()=>{
+                        place.style.display = 'none'
                         game.next()
                     }
                 }
             }else{
-                let takeCard = document.createElement('button')
-                takeCard.type = 'button'
-                takeCard.innerText = 'Take new Card'
-                takeCard.onclick = ()=>{
+                actionButton.innerText = 'Take new Card'
+                actionButton.onclick = ()=>{
                     let newCard = game.takeCard()
                     player.receiveCard(newCard)
                     addCard(newCard)
-                    takeCard.innerText = 'Skip'
-                    takeCard.onclick = ()=>{
-                        place.innerHTML = ''
+                    actionButton.innerText = 'Skip'
+                    actionButton.onclick = ()=>{
+                        place.style.display = 'none'
                         game.next(true)
                     }
                 }
-                place.appendChild(takeCard)
             }
         }else{
             if(game.currentAdd > 0){
-                let takeCard = document.createElement('button')
-                takeCard.type = 'button'
-                takeCard.innerText = 'Take '+game.currentAdd+' cards'
-                takeCard.onclick = ()=>{
+                actionButton.innerText = 'Take '+game.currentAdd+' cards'
+                actionButton.onclick = ()=>{
                     for(let i=0;i< game.currentAdd;i++){
                         let newCard = game.takeCard()
                         player.receiveCard(newCard)
                         addCard(newCard)
                     }
                     game.currentAdd = 0
-                    takeCard.innerText = 'Take new Card'
-                    takeCard.onclick = ()=>{
+                    actionButton.innerText = 'Take new Card'
+                    actionButton.onclick = ()=>{
                         let newCard = game.takeCard()
                         player.receiveCard(newCard)
                         addCard(newCard)
-                        takeCard.innerText = 'Skip'
-                        takeCard.onclick = ()=>{
-                            place.innerHTML = ''
+                        actionButton.innerText = 'Skip'
+                        actionButton.onclick = ()=>{
+                            place.style.display = 'none'
                             game.next(true)
                         }
                     }
                 }
-                place.appendChild(takeCard)
             }else{
-                let takeCard = document.createElement('button')
-                takeCard.type = 'button'
-                takeCard.innerText = 'Take new Card'
-                takeCard.onclick = ()=>{
+                actionButton.innerText = 'Take new Card'
+                actionButton.onclick = ()=>{
                     let newCard = game.takeCard()
                     player.receiveCard(newCard)
                     addCard(newCard)
-                    takeCard.innerText = 'Skip'
-                    takeCard.onclick = ()=>{
-                        place.innerHTML = ''
+                    actionButton.innerText = 'Skip'
+                    actionButton.onclick = ()=>{
+                        place.style.display = 'none'
                         game.next(true)
                     }
                 }
-                place.appendChild(takeCard)
             }
         }
+        place.style.display = 'block'
     }
     function displayNext(player){
         let ready = document.getElementById('ready')
