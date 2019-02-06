@@ -40,7 +40,7 @@ window.onload = (r)=>{
             promptElement.style.display = 'none'
             cb('yellow')
         }
-        promptElement.style.display = 'flex'
+        promptElement.style.display = 'block'
     }
     function displayCard(card){
         let deck = document.getElementById('deck')
@@ -83,15 +83,15 @@ window.onload = (r)=>{
                     if(card.color == 'black'){
                         if(game.currentAdd > 0){
                             if(card.action == 'add'){
-                                place.innerHTML = ''
                                 colorPrompting((chosenColor)=>{
+                                    place.style.display = 'none'
                                     card.chosenColor = chosenColor
                                     chosenCard(card)
                                 })
                             }
                         }else{
-                            place.innerHTML = ''
                             colorPrompting((chosenColor)=>{
+                                place.style.display = 'none'
                                 card.chosenColor = chosenColor
                                 chosenCard(card)
                             })
