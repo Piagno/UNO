@@ -176,7 +176,15 @@ class UNO{
         if(testingCard.color == currentCard.chosenColor){return true}
         if(testingCard.color == currentCard.color){return true}
         if(testingCard.number == undefined){
-            if(testingCard.action == currentCard.action){return true}
+            if(testingCard.action == currentCard.action){
+                if(currentCard.color == 'black'){
+                    if(testingCard.color == currentCard.chosenColor){
+                        return true;
+                    }
+                }else{
+                    return true
+                }
+            }
         }else{
             if(testingCard.number == currentCard.number){return true}
         }
