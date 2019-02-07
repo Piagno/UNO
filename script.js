@@ -207,7 +207,7 @@ window.onload = (r)=>{
                 }
             }
         }
-        place.style.display = 'block'
+        place.style.display = 'flex'
     }
     function displayNext(player){
         let ready = document.getElementById('ready')

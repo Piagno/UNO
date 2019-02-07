@@ -109,3 +109,26 @@ body{
     background-color: red;
     transition: background 0.5s;
 }
+#currentPlayer{
+    display: none;
+    height: 50vh;
+}
+#currentPlayer > div{
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 15%;
+    text-align: center;
+    font-size: 3em;
+}
+#currentHand{
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+}
+#currentHand > div{
+    flex-grow: 1;
+    height: 3em;
+    line-height: 3em;
+    padding-left: 30px;
+    padding-right: 30px;
+}
