@@ -83,6 +83,7 @@ window.onload = (r)=>{
             cardEl.innerText = values.text
             if(game.cardAllowed(card)){
                 possibleCards++
+                cardEl.style.fontWeight = '900'
                 cardEl.onclick = ()=>{
                     if(card.color == 'black'){
                         if(game.currentAdd > 0){
